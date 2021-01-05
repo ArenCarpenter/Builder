@@ -323,6 +323,9 @@ class LossCategoricalCrossentropy(Loss):
         # If one-hot encoded labels
         elif len(y_true.shape) == 2:
             correct_confidences = np.sum(y_pred_clipped * y_true, axis=1)
+        else:
+            raise ValueError('Length of y_true.shape > 2. Cannot calculate negative log likelihood from variable '
+                             'correct_confidences because not defined.')
         # Losses
         negative_log_likelihoods = -np.log(correct_confidences)
         return negative_log_likelihoods
@@ -484,12 +487,14 @@ class Model:
         if isinstance(self.layers[-1], Activation_Softmax) and isinstance(self.loss, Loss_CategoricalCrossentropy):
             self.softmax_classifier_output = Activation_Softmax_Loss_CategoricalCrossentropy()
 
+    # noinspection PyUnboundLocalVariable
     def train(self, X, y, *, epochs=1, batch_size=None, print_every=1, validation_data=None):
         # Initialize accuracy object
         self.accuracy.init(y)
         # Default to 1 if not set
         train_steps = 1
         if validation_data is not None:
+            # Set default validation_steps
             validation_steps = 1
             X_val, y_val = validation_data
         if batch_size is not None:
@@ -563,6 +568,7 @@ class Model:
             layer.forward(layer.prev.output, training)
         # "layer" is now the last object from the list,
         # return its output
+        # noinspection PyUnboundLocalVariable
         return layer.output
 
     def backward(self, output, y):
@@ -634,8 +640,8 @@ class Model:
         model.loss.__dict__.pop('dinputs', None)
         # For each layer, remove inputs, output and dinputs
         for layer in model.layers:
-            for property in ['inputs', 'output', 'dinputs', 'dweights', 'dbiases']:
-                layer.__dict__.pop(property, None)
+            for property_name in ['inputs', 'output', 'dinputs', 'dweights', 'dbiases']:
+                layer.__dict__.pop(property_name, None)
         # Save the model
         with open(path, 'wb') as f:
             pickle.dump(model, f)

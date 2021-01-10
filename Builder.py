@@ -1,5 +1,7 @@
-"""Builder -- Adapted from "Neural Networks from Scratch" by Harrison Kinsley and Daniel Kukiela --
-for use in personal projects, to be used as a package for later adaptation"""
+"""
+Builder -- Adapted from "Neural Networks from Scratch" by Harrison Kinsley and Daniel Kukiela --
+for use in personal projects, to be used as a package for later adaptation
+"""
 
 import numpy as np
 import os
@@ -9,13 +11,44 @@ import copy
 
 
 class LayerDense:
-    def __init__(self, n_inputs, n_neurons,
-                 weight_regularizer_l1=0, weight_regularizer_l2=0,
-                 bias_regularizer_l1=0, bias_regularizer_l2=0):
+    """
+    A fully connected, dense layer.
+
+    Calculate dot(input, weights) + bias. An activation function can be specified in
+    the model architecture, otherwise a linear activation is used, where a(x) = x.
+
+    Arguments:
+        n_inputs:
+        n_neurons: The number of neurons in the layer.
+        weight_regularizer_l1: Set lambda of L1 (Lasso) regularization penalty term for weights matrix.
+            If 0, the default, the penalty term is nullified.
+        weight_regularizer_l2: Set lambda of L2 (Ridge) regularization penalty term for weights matrix.
+            If 0, the default, the penalty term is nullified.
+        bias_regularizer_l1: Set lambda of L1 (Lasso) regularization penalty term for bias matrix.
+            If 0, the default, the penalty term is nullified.
+        bias_regularizer_l2: Set lambda of L2 (Ridge) regularization penalty term for bias matrix.
+            If 0, the default, the penalty term is nullified.
+
+    Example:
+        >>> model = Model()
+        >>> model.add(LayerDense(X.shape[1], 128))
+        >>> model.add(Activation_ReLU())
+        >>> model.add(LayerDense(128, 128))
+        >>> model.add(Activation_ReLU())
+        >>> model.add(LayerDense(128, 10)) # Shape is (inputs, # of output classes)
+        >>> model.add(ActivationSoftmax())
+    """
+    def __init__(self,
+                 n_inputs,
+                 n_neurons,
+                 weight_regularizer_l1=0,
+                 weight_regularizer_l2=0,
+                 bias_regularizer_l1=0,
+                 bias_regularizer_l2=0):
         # Initialize weights and biases
-        self.weights = 0.01 * np.random.randn(n_inputs, n_neurons)  # 0.10 to scale, define as inp, neur so no transpose
+        self.weights = 0.01 * np.random.randn(n_inputs, n_neurons)  # 0.01 to scale
         self.biases = np.zeros((1, n_neurons))
-        # L1 and L2
+        # L1 and L2 Regularization
         self.weight_regularizer_l1 = weight_regularizer_l1
         self.weight_regularizer_l2 = weight_regularizer_l2
         self.bias_regularizer_l1 = bias_regularizer_l1

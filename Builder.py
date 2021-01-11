@@ -18,7 +18,7 @@ class LayerDense:
     the model architecture, otherwise a linear activation is used, where a(x) = x.
 
     Arguments:
-        n_inputs:
+        n_inputs: The size of your input.
         n_neurons: The number of neurons in the layer.
         weight_regularizer_l1: Set lambda of L1 (Lasso) regularization penalty term for weights matrix.
             If 0, the default, the penalty term is nullified.
@@ -88,6 +88,21 @@ class LayerDense:
 
 
 class LayerDropout:
+    """
+    Dropout layer, where the rate is the percentage of neurons to be zeroed-out. For example, a rate of 0.1
+    means that a randomly selected 10% of neurons are disabled.
+
+    Arguments:
+        rate: Percentage of neurons to be disabled.
+
+    Example:
+        >>> model = Model()
+        >>> model.add(LayerDense(2, 128))
+        >>> model.add(Activation_ReLU())
+        >>> model.add(LayerDropout(0.1)) # 10% dropout
+        >>> model.add(LayerDense(128, 10))
+        >>> model.add(ActivationSoftmax())
+    """
     def __init__(self, rate):
         # Store rate
         self.rate = 1 - rate
@@ -109,11 +124,18 @@ class LayerDropout:
 
 
 class LayerInput:
+    """
+    This is a utility layer to pass the initial inputs to the first hidden layer. This layer has only a
+    forward pass and has no weights or biases associated with it.
+    """
     def forward(self, inputs, training):
         self.output = inputs
 
 
 class ActivationReLU:
+    """
+
+    """
     def forward(self, inputs, training):
         self.inputs = inputs
         self.output = np.maximum(0, inputs)

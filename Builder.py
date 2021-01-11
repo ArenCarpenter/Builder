@@ -134,7 +134,24 @@ class LayerInput:
 
 class ActivationReLU:
     """
+    Rectified linear unit activation function applied to a neuron's output. Allows for true zero outputs that
+    can lead to sparse representation and faster learning/simpler models. Recommended to be the default activation
+    function for deep learning.
 
+    Math:
+        output = {x, if x > 0
+                  0, if x <= 0}
+
+        If x is greater than 0, output equals x. If x is less than or equal to 0, output equals 0.
+
+    Example:
+        >>> model = Model()
+        >>> model.add(LayerDense(X.shape[1], 128))
+        >>> model.add(Activation_ReLU())
+        >>> model.add(LayerDense(128, 128))
+        >>> model.add(Activation_ReLU())
+        >>> model.add(LayerDense(128, 10)) # Shape is (inputs, # of output classes)
+        >>> model.add(ActivationSoftmax())
     """
     def forward(self, inputs, training):
         self.inputs = inputs

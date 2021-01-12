@@ -142,6 +142,8 @@ class ActivationReLU:
         output = {x, if x > 0
                   0, if x <= 0}
 
+        Equivalent
+
         If x is greater than 0, output equals x. If x is less than or equal to 0, output equals 0.
 
     Example:

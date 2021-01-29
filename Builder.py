@@ -142,7 +142,7 @@ class ActivationReLU:
         output = {x, if x > 0
                   0, if x <= 0}
 
-        Equivalent
+        Equivalent:
 
         If x is greater than 0, output equals x. If x is less than or equal to 0, output equals 0.
 
@@ -169,6 +169,31 @@ class ActivationReLU:
 
 
 class ActivationSoftmax:
+    """
+    Softmax activation function applied to a neuron's output. Calculates a vector of probabilities related to each
+    possible class for categorical classification. Each element is in range(0,1) representing its probability
+    and sum to 1.
+
+    Math:
+        np.exp(x) / np.sum(np.exp(x)) --> Normalized probabilities for each class
+
+        Predictions are then made with np.argmax(vectors) to select highest probability.
+
+        Equivalent:
+
+        Apply the exponential function to each element and normalize by dividing by the sum of all exponentiated
+        elements.
+
+    Example:
+        >>> model = Model()
+        >>> model.add(LayerDense(X.shape[1], 128))
+        >>> model.add(Activation_ReLU())
+        >>> model.add(LayerDense(128, 128))
+        >>> model.add(Activation_ReLU())
+        >>> model.add(LayerDense(128, 10)) # Shape is (inputs, # of output classes)
+        >>> model.add(ActivationSoftmax())
+    """
+
     def forward(self, inputs, training):
         # Get un-normalized probabilities
         exp_values = np.exp(inputs - np.max(inputs, axis=1, keepdims=True))

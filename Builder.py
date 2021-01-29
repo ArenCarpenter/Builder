@@ -218,6 +218,26 @@ class ActivationSoftmax:
 
 
 class ActivationSigmoid:
+    """
+    Sigmoid activation function applied to a neuron's output. The Sigmoid function is an S-shaped curve that is
+    bounded between 0 and 1, is differentiable, and is monotonic. Because it is bounded 0 to 1, its output can be
+    interpreted as a probability.
+
+    For binary classification, the sigmoid is equal to a 2-element softmax.
+
+    Math:
+        sigmoid = 1 / (1 + e^(-x))
+
+        Increasingly negative inputs are pushed to 0, and increasingly positive inputs are pushed to 1.
+
+    Example:
+        >>> model = Model()
+        >>> model.add(LayerDense(2, 64) # binary classification with sigmoid
+        >>> model.add(ActivationReLU())
+        >>> model.add(LayerDense(64, 1))
+        >>> model.add(ActivationSigmoid()) # >=.5 is class 1, <.5 is class 0
+    """
+
     def forward(self, inputs, training):
         self.inputs = inputs
         self.output = 1 / (1 + np.exp(-inputs))

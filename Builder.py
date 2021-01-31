@@ -250,6 +250,20 @@ class ActivationSigmoid:
 
 
 class ActivationLinear:
+    """
+    Linear activation function applied to a neuron's output. The output of the neuron is the input. A linear activation
+    precludes backpropagation because the derivative is a constant. If only linear activations are used, the neural
+    network becomes a linear regression model because a linear combination of linear functions remains a linear
+    function. The network will be inefficient at learning non-linear relationships.
+
+    Often functions as a pass-through layer.
+
+    Math:
+        y = x
+
+        Explanation:
+            The output is the input, unmodified.
+    """
     def forward(self, inputs, training):
         self.inputs = inputs
         self.output = inputs

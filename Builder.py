@@ -292,7 +292,7 @@ class OptimizerSGD:
         >>> model.add(LayerDense(128, 10))
         >>> model.add(ActivationSoftmax())
         >>> model.set(loss=LossCategoricalCrossentropy(),
-                      optimizer = OptimizerAdam(decay=1e-3),
+                      optimizer=OptimizerAdam(decay=1e-3),
                       accuracy=AccuracyCategorical())
     """
 
@@ -346,7 +346,7 @@ class OptimizerAdagrad:
         >>> model.add(LayerDense(128, 10))
         >>> model.add(ActivationSoftmax())
         >>> model.set(loss=LossCategoricalCrossentropy(),
-                      optimizer = OptimizerAdagrad(epsilon=1e-7),
+                      optimizer=OptimizerAdagrad(epsilon=1e-7),
                       accuracy=AccuracyCategorical())
     """
 
@@ -396,7 +396,7 @@ class OptimizerRMSprop:
         >>> model.add(LayerDense(128, 10))
         >>> model.add(ActivationSoftmax())
         >>> model.set(loss=LossCategoricalCrossentropy(),
-                      optimizer = OptimizerRMSprop(epsilon=1e-7, rho=0.9),
+                      optimizer=OptimizerRMSprop(epsilon=1e-7, rho=0.9),
                       accuracy=AccuracyCategorical())
     """
 
@@ -428,6 +428,30 @@ class OptimizerRMSprop:
 
 
 class OptimizerAdam:
+    """
+    Adam optimizer with decay functionality. Adaptive Moment Estimation built on RMSprop optimizer. Applies momentum
+    like with Stochastic Gradient Descent and uses an adaptive per-parameter learning rate via a cache, like RMSprop.
+    Beta 1 and 2 are hyperparameters to control for cold-starting in the momentum and cache, respectively, and falls
+    off as iterations continue.
+
+    Arguments:
+        learning_rate: Learning rate. Defaults to 0.001.
+        decay: Learning rate decay. Default is set to 0 (no decay).
+        epsilon: Hyperparameter used to prevent division by zero during parameter updates. Defaults to 1e-7.
+        beta_1: Hyperparameter used to compensate for the initially zeroed momentum. Defaults to 0.9.
+        beta_2: Hyperparameter used to compensate for the initially zeroed cache. Defaults to 0.999.
+
+    Example:
+        >>> model = Model()
+        >>> model.add(LayerDense(X.shape[1], 128))
+        >>> model.add(ActivationReLU())
+        >>> model.add(LayerDense(128, 10))
+        >>> model.add(ActivationSoftmax())
+        >>> model.set(loss=LossCategoricalCrossentropy(),
+                      optimizer=OptimizerAdam(learning_rate=0.002, decay=1e-5),
+                      accuracy=AccuracyCategorical())
+    """
+
     def __init__(self, learning_rate=0.001, decay=0., epsilon=1e-7, beta_1=0.9, beta_2=0.999):
         self.learning_rate = learning_rate
         self.current_learning_rate = learning_rate

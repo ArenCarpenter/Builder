@@ -330,7 +330,28 @@ class OptimizerSGD:
 
 
 class OptimizerAdagrad:
-    def __init__(self, learning_rate=1., decay=0., epsilon=1e-7):
+    """
+    Adagrad optimizer with decay and momentum functionality. Adagrad uses a different learning rate for each parameter,
+    which makes it effective with sparse data. The lr will decrease monotonically as the parameter caches increase each
+    update.
+
+    Arguments:
+        learning_rate: Learning rate. Defaults to 0.01.
+        decay: Learning rate decay. Default is set to 0 (no decay).
+        epsilon: Hyperparameter used to prevent division by zero during parameter updates. Defaults to 1e-7.
+
+    Example:
+        >>> model = Model()
+        >>> model.add(LayerDense(X.shape[1], 128))
+        >>> model.add(ActivationReLU())
+        >>> model.add(LayerDense(128, 10))
+        >>> model.add(ActivationSoftmax())
+        >>> model.set(loss=LossCategoricalCrossentropy(),
+                      optimizer = OptimizerAdagrad(epsilon=1e-7),
+                      accuracy=AccuracyCategorical())
+    """
+
+    def __init__(self, learning_rate=0.01, decay=0., epsilon=1e-7):
         self.learning_rate = learning_rate
         self.current_learning_rate = learning_rate
         self.decay = decay

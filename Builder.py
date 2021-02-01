@@ -331,9 +331,8 @@ class OptimizerSGD:
 
 class OptimizerAdagrad:
     """
-    Adagrad optimizer with decay and momentum functionality. Adagrad uses a different learning rate for each parameter,
-    which makes it effective with sparse data. The lr will decrease monotonically as the parameter caches increase each
-    update.
+    Adagrad optimizer with decay functionality. Adagrad uses a different learning rate for each parameter, which makes
+    it effective with sparse data. The lr will decrease monotonically as the parameter caches increase each update.
 
     Arguments:
         learning_rate: Learning rate. Defaults to 0.01.
@@ -378,6 +377,29 @@ class OptimizerAdagrad:
 
 
 class OptimizerRMSprop:
+    """
+    Root mean squared propagation optimizer with decay functionality. Like Adagrad, RMSprop uses a cache to update the
+    learning rate on a per-parameter basis, but incorporates momentum (with a moving average) and decay to the cache
+    with the rho hyperparameter. These changes make RMSprop less likely to stall and lr will not necessarily decrease
+    monotonically.
+
+    Arguments:
+        learning_rate: Learning rate. Defaults to 0.001.
+        decay: Learning rate decay. Default is set to 0 (no decay).
+        epsilon: Hyperparameter used to prevent division by zero during parameter updates. Defaults to 1e-7.
+        rho: Cache memory decay rate. Defaults to 0.9.
+
+    Example:
+        >>> model = Model()
+        >>> model.add(LayerDense(X.shape[1], 128))
+        >>> model.add(ActivationReLU())
+        >>> model.add(LayerDense(128, 10))
+        >>> model.add(ActivationSoftmax())
+        >>> model.set(loss=LossCategoricalCrossentropy(),
+                      optimizer = OptimizerRMSprop(epsilon=1e-7, rho=0.9),
+                      accuracy=AccuracyCategorical())
+    """
+
     def __init__(self, learning_rate=0.001, decay=0., epsilon=1e-7, rho=0.9):
         self.learning_rate = learning_rate
         self.current_learning_rate = learning_rate

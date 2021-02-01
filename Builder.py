@@ -277,7 +277,26 @@ class ActivationLinear:
 
 
 class OptimizerSGD:
-    def __init__(self, learning_rate=1., decay=0., momentum=0.):
+    """
+    Stochastic gradient descent optimizer with decay and momentum functionality.
+
+    Arguments:
+        learning_rate: Learning rate. Defaults to 0.01.
+        decay: Learning rate decay. Default is set to 0 (no decay).
+        momentum: Learning rate momentum. Default is set to 0 (no momentum).
+
+    Example:
+        >>> model = Model()
+        >>> model.add(LayerDense(X.shape[1], 128))
+        >>> model.add(ActivationReLU())
+        >>> model.add(LayerDense(128, 10))
+        >>> model.add(ActivationSoftmax())
+        >>> model.set(loss=LossCategoricalCrossentropy(),
+                      optimizer = OptimizerAdam(decay=1e-3),
+                      accuracy=AccuracyCategorical())
+    """
+
+    def __init__(self, learning_rate=0.01, decay=0., momentum=0.):
         self.learning_rate = learning_rate
         self.current_learning_rate = learning_rate
         self.decay = decay
